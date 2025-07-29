@@ -27,13 +27,16 @@ export default defineComponent({
 
     name: 'FormularioLateral',
     components: { TemporizadorComponent },
+    emits: ['aoSalvarTarefa'],
 
     methods: {
         finalizacaoTarefa(tempoEmSegundos: number): void {
-            console.log("O tempo foi de: ", tempoEmSegundos)
-            console.log("Descrição da tarefa: ", this.descricao)
+            this.$emit('aoSalvarTarefa', {
+                duracaoEmSegundos: tempoEmSegundos,
+                descricao: this.descricao
+            })
             this.descricao = ''
-        }
+        },
     }
 });
 </script>
