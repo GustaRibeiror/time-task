@@ -1,10 +1,9 @@
 <template>
-    <div class="box">
+    <div class="box formulario">
         <div class="columns">
             <div class="column is-8" role="form" aria-label="Formulário para criação de uma nova tarefa">
                 <input type="text" placeholder="Qual tarefa você deseja iniciar?" class="input" v-model="descricao" />
             </div>
-            <BotaoTempo />
 
             <div class="column">
                 <TemporizadorComponent @aoFinalizarTarefa="finalizacaoTarefa" />
@@ -33,12 +32,19 @@ export default defineComponent({
         finalizacaoTarefa(tempoEmSegundos: number): void {
             this.$emit('aoSalvarTarefa', {
                 duracaoEmSegundos: tempoEmSegundos,
-                descricao: this.descricao
+                descricao: this.descricao,
             })
             this.descricao = ''
         },
     }
 });
 </script>
+
+<style>
+.formulario {
+    color: var(--text-primario);
+    background-color: var(--bg-primario)
+}
+</style>
 
 <!-- Pai passa pro filho via props -->

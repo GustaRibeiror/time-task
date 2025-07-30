@@ -1,16 +1,18 @@
 <template>
-  <main class="columns is-gapless is-multiline">
+  <main class="columns is-gapless is-multiline " :class="{ 'modo-escuro': tema }">
     <div class="column is-one-quarter">
-      <BarraLateral />
-
+      <BarraLateral @alternarModo="changeMode" />
     </div>
 
-    <div class="column is-three-quarter">
+    <div class="column is-three-quarter conteudo">
       <FormularioLateral @aoSalvarTarefa="salvarTarefa" />
       <div class="lista">
-        <TarefaComponent v-for="(tarefa, index) in tarefas" :key="index" :tarefa="tarefa" />
-      </div>
+        <TarefaComponent v-for="tarefa in tarefas" :key="tarefa.id" :tarefa="tarefa" @excluirTarefa="removerTarefa" />
 
+        <h1 v-if="tarefas.length === 0" class="subtitle is-4 titulo">
+          Ainda não foi adicionada nenhuma tarefa :
+        </h1>
+      </div>
     </div>
   </main>
 </template>
@@ -26,17 +28,24 @@ export default defineComponent({
   name: 'App',
   components: { BarraLateral, FormularioLateral, TarefaComponent },
 
-  //criar uma coisa que salve uma tarefa e adiciona o resultado em uma lista?
-
   data() {
     return {
-      tarefas: [] as ITarefa[]
+      tarefas: [] as ITarefa[],
+      tema: false
     }
   },
 
   methods: {
     salvarTarefa(tarefa: ITarefa) {
+      tarefa.id = new Date().getTime();
       this.tarefas.push(tarefa)
+    },
+    removerTarefa(idTarefa: number) {
+      let filtro = this.tarefas.filter(item => item.id !== idTarefa);
+      this.tarefas = filtro;
+    },
+    changeMode(modoEscuro: boolean) {
+      this.tema = modoEscuro
     }
   }
 });
@@ -46,5 +55,23 @@ export default defineComponent({
 <style scoped>
 .lista {
   padding: 1.25rem;
+}
+
+main {
+  --bg-primario: #fff;
+  --text-primario: #000;
+}
+
+main.modo-escuro {
+  --bg-primario: #2b2d42;
+  --text-primario: #ddd;
+}
+
+.conteudo {
+  background-color: var(--bg-primario)
+}
+
+.titulo {
+  color: var(--text-primario)
 }
 </style>
